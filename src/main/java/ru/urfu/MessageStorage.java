@@ -1,10 +1,11 @@
 package ru.urfu;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,58 +17,43 @@ import java.util.stream.Collectors;
 public class MessageStorage {
     private static final List<Message> _messages = new ArrayList<>();
 
-    public static List<Message> get_messages() {
-        return new ArrayList<>(_messages);
+//    static {
+//        _messages.add(new Message("first message"));
+//        _messages.add(new Message("second message"));
+//    }
+
+    @RequestMapping(value = "/messages", method = RequestMethod.GET)
+    ModelAndView renderAllMessages() {
+        ModelAndView mav = new ModelAndView("show_messages");
+        List<String> messages;
+        if (_messages.size() == 0)
+            messages = Arrays.asList();
+        else
+         messages = _messages
+                .stream()
+                .map(msg ->msg.get_message())
+                 .collect(Collectors.toList());
+        mav.addObject("messages", messages);
+            return mav;
     }
 
-    static {
-        _messages.add(new Message("Моё первое сообщение"));
-        _messages.add(new Message("Здесь будет новое сообщение"));
+    @RequestMapping(value = "/add_message", method = RequestMethod.POST)
+    RedirectView add_message(@ModelAttribute("msg") String msg) {
+        if ("".compareTo(msg) != 0) {
+            _messages.add(new Message(msg));
+        }
+        return new RedirectView("/messages");
     }
 
-    @RequestMapping("/messages")
-    String renderAllMessages() {
-        String messages = _messages
-            .stream()
-            .map(msg -> "<li>" + msg.get_message() + "</li>")
-            .collect(Collectors.joining());
-
-        return
-            "<html>" +
-            "   <link rel=\"stylesheet\" type=\"text/css\" href=\"/twitter.css\"/>" +
-            "   <body>" +
-            "       <h1>twitter</h1>" +
-            "       This is your twitter application" +
-            "       <ul class=\"messages\">" +
-                        messages +
-            "       </ul>"+
-            "       <a href=\"/\">main</a>" +
-            "   </body>" +
-            "</html>";
+    @RequestMapping(value = "/add_message", method = RequestMethod.GET)
+    ModelAndView show_adding() {
+        return new ModelAndView("add_message");
     }
 
-    @RequestMapping("/sending")
-    static String sendNewMessage(@RequestParam(value="msg", required=false) String msg) {
-        if (msg == null)
-            return
-                "<html>" +
-                "   Error <br>"+
-                "   <a href=\"/messages\">messages</a>" +
-                "</html>";
-        if (msg == "")
-            return
-                "<html>" +
-                "   Twitt anything! <br>"+
-                "   <a href=\"/\">main</a>" +
-                "</html>";
-        _messages.add(new Message(msg));
-        return
-                String.format("<html>" +
-                        "   <link rel=\"stylesheet\" type=\"text/css\" href=\"/twitter.css\"/>" +
-                        "   <body>" +
-                        "       Message added! %s%n<br>" +
-                        "       <a href=\"/messages\">messages</a>" +
-                        "   </body>" +
-                        "</html>", (msg.length() > 140)?"(corrected to 140 characters)":"");
+
+    @RequestMapping(value = "/delete_message/{id}", method = RequestMethod.POST)
+    RedirectView delete_message(@PathVariable("id") int id) {
+        _messages.remove(id);
+        return new RedirectView("/messages");
     }
 }
