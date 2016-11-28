@@ -3,6 +3,6 @@
 <html lang="en">
     <body>
         <a href="/messages">Show messages</a> <br>
-        <a href="/add_message">Add message</a>
+        <a href="/login">Log in</a>
     </body>
 </html>

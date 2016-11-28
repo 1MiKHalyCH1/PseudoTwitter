@@ -17,11 +17,6 @@ import java.util.stream.Collectors;
 public class MessageStorage {
     private static final List<Message> _messages = new ArrayList<>();
 
-//    static {
-//        _messages.add(new Message("first message"));
-//        _messages.add(new Message("second message"));
-//    }
-
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     ModelAndView renderAllMessages() {
         ModelAndView mav = new ModelAndView("show_messages");
