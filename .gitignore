@@ -1,4 +1,7 @@
-.idea
-.gradle
-build
-classes
+/.gradle/
+/.idea/
+/gradle/
+/gradlew
+/gradlew.bat
+/.gitignore
+/target/

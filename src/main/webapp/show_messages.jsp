@@ -5,7 +5,7 @@
 <html lang="en">
 <body>
 <form action="/add_message" method="Post">
-    <textarea rows="4" placeholder="Your message hear..." maxlength="180" name="msg"></textarea>
+    <textarea rows="4" placeholder="Your _message hear..." maxlength="180" name="msg"></textarea>
     <button type="submit">Twitt!</button>
 </form>
 <ul class="messages">
@@ -22,5 +22,6 @@
             }
     %>
 </ul>
+<a href="/">back</a>
 </body>
 </html>

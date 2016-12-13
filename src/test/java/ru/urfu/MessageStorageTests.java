@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.urfu.controllers.MessageController;
 
 import java.util.Arrays;
 
@@ -27,7 +28,7 @@ public class MessageStorageTests {
 
     @Before
     public void setUp() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new MessageStorage()).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new MessageController()).build();
     }
 
     @Test
