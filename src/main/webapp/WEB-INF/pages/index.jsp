@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 
 <html lang="en">
+    <head>
+    </head>
     <body>
-        <p>Hi, ${username}</p>
+        <h1>Hi, ${username}</h1>
         <a href="/messages">Show messages</a> <br>
         <a href="/logout">Log out</a>
     </body>

@@ -8,6 +8,6 @@ import java.util.Optional;
  **/
 public interface UserDao {
     Optional<User> find(int id);
-    Optional<User> find(String login);
+    Optional<User> findByLogin(String login);
     void create(User user);
 }

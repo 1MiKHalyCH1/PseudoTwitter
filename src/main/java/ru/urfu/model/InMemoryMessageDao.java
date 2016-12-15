@@ -9,9 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-/**
- * Created by mikhail on 12/14/16.
- **/
 @Primary
 @Repository
 public class InMemoryMessageDao implements MessageDao {

@@ -12,10 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by mikhail on 12/1/16.
- **/
 @Named
 public class UserProvider implements AuthenticationProvider {
     @Inject
@@ -26,10 +24,13 @@ public class UserProvider implements AuthenticationProvider {
         String login = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = storage.find(login).get();
-        if (user != null && user.getPassword().equals(password)) {
-            List<GrantedAuthority> grantedAuths = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-            return new UsernamePasswordAuthenticationToken(login, password, grantedAuths);
+        Optional<User> userFromDB = storage.findByLogin(login);
+        if (userFromDB.isPresent()) {
+            User user = userFromDB.get();
+            if (user != null && user.getPassword().equals(password)) {
+                List<GrantedAuthority> grantedAuths = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+                return new UsernamePasswordAuthenticationToken(login, password, grantedAuths);
+            }
         }
         return null;
     }

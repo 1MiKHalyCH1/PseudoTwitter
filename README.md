@@ -1,10 +1,8 @@
 # urfu twitter project
 
 ##build command:
-./gradlew build
-
-##console start command:
-java -jar build/libs/twitter-0.0.1-SNAPSHOT.jar
+mvn install
+mvn clean spring-boot:run
 
 ##Ide start command:
 just run ru.urfu.TwitterApplication
