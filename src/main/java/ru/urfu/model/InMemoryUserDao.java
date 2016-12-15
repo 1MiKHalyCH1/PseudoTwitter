@@ -1,7 +1,7 @@
-package ru.urfu.modelaaa;
+package ru.urfu.model;
 
 import org.springframework.stereotype.Repository;
-import ru.urfu.model.User;
+import ru.urfu.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,7 +12,7 @@ import java.util.Optional;
  * Created by mikhail on 12/1/16.
  **/
 @Repository
-public class InMemoryUserDaoImpl implements UserDao {
+public class InMemoryUserDao implements UserDao {
     @PersistenceContext private EntityManager em;
 
     @Transactional

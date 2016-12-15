@@ -12,7 +12,6 @@ import javax.inject.Inject;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject UserProvider provider;
-
     @Inject UserDetailsService details;
 
     @Override

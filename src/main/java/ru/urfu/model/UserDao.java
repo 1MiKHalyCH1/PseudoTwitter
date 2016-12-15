@@ -1,6 +1,5 @@
-package ru.urfu.modelaaa;
-
-import ru.urfu.model.User;
+package ru.urfu.model;
+import ru.urfu.entities.User;
 
 import java.util.Optional;
 

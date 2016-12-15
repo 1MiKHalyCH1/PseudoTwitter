@@ -1,11 +1,13 @@
 package ru.urfu.controllers;
 
+import org.springframework.data.util.Pair;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import ru.urfu.model.Message;
-
-import java.util.ArrayList;
+import ru.urfu.entities.Message;
+import ru.urfu.model.InMemoryMessageDao;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,29 +18,28 @@ import java.util.stream.Collectors;
  */
 @RestController
 public class MessageController {
-    private static final List<Message> _messages = new ArrayList<>();
+    @Inject
+    InMemoryMessageDao messagesStorage;
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     ModelAndView renderAllMessages() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         ModelAndView mav = new ModelAndView("show_messages");
-        List<String> messages;
-        if (_messages.size() == 0)
-            messages = Arrays.asList();
-        else
-         messages = _messages
-                .stream()
-                .map(msg ->msg.get_message())
-                 .collect(Collectors.toList());
-        mav.addObject("messages", messages);
-            return mav;
+        mav.addObject("messages",
+                messagesStorage.findAll(username).stream()
+                        .map(msg -> Pair.of(msg.getMessage(), msg.getId()))
+                        .collect(Collectors.toList()));
+        return mav;
     }
 
     @RequestMapping(value = "/add_message", method = RequestMethod.POST)
     RedirectView add_message(@ModelAttribute("msg") String str_msg) {
         if ("".compareTo(str_msg) != 0) {
             Message msg = new Message();
-            msg.set_message(str_msg);
-            _messages.add(msg);
+            msg.setMessage(str_msg);
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            msg.setAuthorName(username);
+            messagesStorage.create(msg);
         }
         return new RedirectView("/messages");
     }
@@ -51,7 +52,7 @@ public class MessageController {
 
     @RequestMapping(value = "/delete_message/{id}", method = RequestMethod.POST)
     RedirectView delete_message(@PathVariable("id") int id) {
-        _messages.remove(id);
+        messagesStorage.remove(id);
         return new RedirectView("/messages");
     }
 }

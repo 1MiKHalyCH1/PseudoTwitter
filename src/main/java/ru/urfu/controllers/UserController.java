@@ -1,13 +1,11 @@
 package ru.urfu.controllers;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import ru.urfu.model.User;
-import ru.urfu.modelaaa.UserDao;
+import ru.urfu.entities.User;
+import ru.urfu.model.UserDao;
 
 import javax.inject.Inject;
 
@@ -20,7 +18,7 @@ public class UserController {
     UserDao user_storage;
 
     @GetMapping("/login")
-    ModelAndView login() {
+    ModelAndView login(Model model) {
         return new ModelAndView("login");
     }
 
@@ -37,8 +35,8 @@ public class UserController {
         user.setPassword(password);
 
         System.out.println(username + ' ' + password);
-
         user_storage.create(user);
         return new RedirectView("/");
+
     }
 }

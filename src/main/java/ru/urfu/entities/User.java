@@ -1,4 +1,4 @@
-package ru.urfu.model;
+package ru.urfu.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
@@ -10,11 +10,16 @@ import java.util.Collections;
 @Entity
 @Table(name = "TBL_USER")
 public class User {
-    private int id;
-    private String login, password;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    @Column(nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
     public int getId() {
         return id;
     }
