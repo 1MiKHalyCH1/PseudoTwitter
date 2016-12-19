@@ -7,8 +7,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.urfu.entities.Message;
 import ru.urfu.model.InMemoryMessageDao;
+
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,5 +54,22 @@ public class MessageController {
     RedirectView delete_message(@PathVariable("id") int id) {
         messagesStorage.remove(id);
         return new RedirectView("/messages");
+    }
+
+    @RequestMapping(value = "/get_message/{id}", method = RequestMethod.GET)
+    Message get_message(@PathVariable("id") int id) {
+        return messagesStorage.find(id);
+    }
+
+    @RequestMapping(value = "/get_messages", method = RequestMethod.GET)
+    List<Message> get_messages() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return messagesStorage.findAll(username).stream()
+                .collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "/get_all_messages", method = RequestMethod.GET)
+    List<Message> get_all_messages() {
+        return messagesStorage.findAll();
     }
 }

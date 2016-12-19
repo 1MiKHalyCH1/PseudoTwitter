@@ -1,5 +1,6 @@
 package ru.urfu.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Collections;
@@ -17,6 +18,7 @@ public class User {
     @Column(nullable = false)
     private String login;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -41,7 +43,7 @@ public class User {
         this.password = password;
     }
 
-    public org.springframework.security.core.userdetails.User returnUser() {
+        public org.springframework.security.core.userdetails.User returnUser() {
         return new org.springframework.security.core.userdetails.User(login, password, Collections.singletonList((GrantedAuthority) () -> "ROLE_USER"));
     }
 

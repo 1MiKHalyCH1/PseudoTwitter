@@ -34,6 +34,12 @@ public class InMemoryMessageDao implements MessageDao {
                 .getResultList();
     }
 
+    @Override
+    public List<Message> findAll() {
+        return em.createQuery("from " + Message.class.getName(), Message.class)
+                .getResultList();
+    }
+
     @Transactional
     @Override
     public void remove(int id) {

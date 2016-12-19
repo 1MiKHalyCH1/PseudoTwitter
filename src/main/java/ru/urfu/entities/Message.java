@@ -1,5 +1,7 @@
 package ru.urfu.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -9,13 +11,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "TBL_MESSAGE")
 public class Message {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(nullable = false)
     private String message;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn
     private String authorName;
