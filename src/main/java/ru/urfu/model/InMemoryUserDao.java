@@ -2,6 +2,7 @@ package ru.urfu.model;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import ru.urfu.entities.Message;
 import ru.urfu.entities.User;
 
 import javax.persistence.EntityManager;
@@ -30,5 +31,15 @@ public class InMemoryUserDao implements UserDao {
                 .setParameter("login", login)
                 .getResultList();
         return res.size() > 0 ? Optional.ofNullable(res.get(0)) : Optional.empty();
+    }
+
+    public List<User> findAll() {
+        return em.createQuery("from " + User.class.getName(), User.class).getResultList();
+    }
+
+    @Transactional
+    @Override
+    public void update (User user) {
+        em.merge(user);
     }
 }

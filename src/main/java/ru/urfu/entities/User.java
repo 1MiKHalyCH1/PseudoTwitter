@@ -3,16 +3,17 @@ package ru.urfu.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
-/**
- * Created by mikhail on 12/1/16.
- **/
 @Entity
 @Table(name = "TBL_USER")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "userid")
     private int id;
 
     @Column(nullable = false)
@@ -21,6 +22,18 @@ public class User {
     @JsonIgnore
     @Column(nullable = false)
     private String password;
+
+    @JsonIgnore
+    @ManyToMany
+    private List<User> friends = new ArrayList<>();
+
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
+    }
 
     public int getId() {
         return id;

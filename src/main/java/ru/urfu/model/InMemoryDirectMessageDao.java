@@ -3,6 +3,7 @@ package ru.urfu.model;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.entities.DirectMessage;
 import ru.urfu.entities.Message;
 
 import javax.persistence.EntityManager;
@@ -11,43 +12,45 @@ import java.util.List;
 
 @Primary
 @Repository
-public class InMemoryMessageDao implements MessageDao {
+public class InMemoryDirectMessageDao implements DirectMessageDao {
     @PersistenceContext
     private EntityManager em;
 
     @Transactional
     @Override
-    public void create(Message msg) {
+    public void create(DirectMessage msg) {
         em.persist(msg);
     }
 
     @Override
-    public Message find(int id) {
-        return em.find(Message.class, id);
+    public DirectMessage find(int id) {
+        return em.find(DirectMessage.class, id);
     }
 
     @Override
-    public List<Message> findAll(String username) {
-        return em.createQuery("from " + Message.class.getName() + " msg" +
-                " where msg.authorName=:username", Message.class)
+    public List<DirectMessage> findAll(String username) {
+        return em.createQuery("from " + DirectMessage.class.getName() + " msg" +
+                " where msg.clientName=:username", DirectMessage.class)
                 .setParameter("username", username)
                 .getResultList();
     }
 
     @Override
-    public List<Message> findAll() {
-        return em.createQuery("from " + Message.class.getName(), Message.class)
+    public List<DirectMessage> findAll() {
+        return em.createQuery("from " + DirectMessage.class.getName(), DirectMessage.class)
                 .getResultList();
     }
 
     @Transactional
     @Override
     public void remove(int id) {
-        Message msg = find(id);
+        DirectMessage msg = find(id);
         em.remove(msg);
     }
 
     @Transactional
     @Override
-    public void update (Message msg) { em.merge(msg); }
+    public void update (DirectMessage msg) {
+        em.merge(msg);
+    }
 }

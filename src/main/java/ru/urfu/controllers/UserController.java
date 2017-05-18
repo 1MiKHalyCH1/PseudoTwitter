@@ -1,10 +1,14 @@
 package ru.urfu.controllers;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.urfu.entities.User;
+import ru.urfu.model.InMemoryMessageDao;
+import ru.urfu.model.InMemoryUserDao;
 import ru.urfu.model.UserDao;
 
 import javax.inject.Inject;
@@ -15,8 +19,8 @@ import java.util.Optional;
  **/
 @Controller
 public class UserController {
-    @Inject
-    UserDao user_storage;
+    @Inject InMemoryUserDao userStorage;
+    @Inject InMemoryMessageDao messageStorage;
 
     @GetMapping("/login")
     String login(Model model) {
@@ -36,12 +40,21 @@ public class UserController {
         user.setLogin(username);
         user.setPassword(password);
 
-        Optional<User> userWithLoginInDB = user_storage.findByLogin(username);
+        Optional<User> userWithLoginInDB = userStorage.findByLogin(username);
         if (!userWithLoginInDB.isPresent()) {
-            user_storage.create(user);
+            userStorage.create(user);
             return "redirect:/";
         }
         redirectAttributes.addAttribute("error", "Error! Try again!");
         return "redirect:/register";
+    }
+
+    @RequestMapping(value="/{username}", method = RequestMethod.GET)
+    ModelAndView profilePage(@PathVariable("username") String username){
+        User currentUser = userStorage.findByLogin(username).get();
+        ModelAndView mav = new ModelAndView("profile");
+        mav.addObject("user", currentUser);
+        mav.addObject("messages", messageStorage.findAll(username));
+        return mav;
     }
 }
