@@ -58,7 +58,7 @@ public class StatisticController {
                 .map(Message::getMessage)
                 .map(String::toLowerCase)
                 .flatMap(s -> Arrays.stream(s.split(" "))
-                        .map(x -> x.replaceAll("[^a-zA-Z0-9]", ""))
+                        .map(x -> x.replaceAll("[^a-zA-Z0-9А-Яа-яЁё]", ""))
                         .filter(x -> !x.isEmpty()))
                 .collect(toConcurrentMap(s -> s, w -> 1, Integer::sum))
                 .entrySet()
